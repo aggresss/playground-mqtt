@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# CMakeLists.txt for aggresss/playground-libre
+# CMakeLists.txt for aggresss/playground-mqtt
 # ------------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 2.8)
@@ -25,7 +25,7 @@ endif()
 # Project
 # ------------------------------------------------------------------------------
 
-project("playground-libre")
+project("playground-mqtt")
 
 # ------------------------------------------------------------------------------
 # Get and Display infomation
@@ -101,6 +101,8 @@ enable_testing()
 # ------------------------------------------------------------------------------
 
 option(BUILD_ALL "Build all submodule" OFF)
+option(WITH_PAHO "Build with eclipse paho" ON)
+option(WITH_GOOGLE_IOTC "Build with google iotc" ON)
 
 # ------------------------------------------------------------------------------
 # Common directory
@@ -109,92 +111,24 @@ option(BUILD_ALL "Build all submodule" OFF)
 set(TOP_DIRS ${PROJECT_SOURCE_DIR})
 set(THIRD_PARTY_DIRS ${PROJECT_SOURCE_DIR}/third_party)
 
-# libre
-set(LIBRE_DIRS ${THIRD_PARTY_DIRS}/re)
-set(LIBRE_INCLUDE_DIRS ${LIBRE_DIRS}/include)
-set(LIBRE_SRC_DIRS ${LIBRE_DIRS}/src)
+# paho
+if(WITH_PAHO)
+  set(PAHO_PREFIX ${PROJECT_BINARY_DIR}/third_party/paho)
+  set(PAHO_INCLUDE_DIRS ${PAHO_PREFIX}/include)
+  set(PAHO_LIBRARIES ${PAHO_PREFIX}/lib)
+endif()
 
-# librem
-set(LIBREM_DIRS ${THIRD_PARTY_DIRS}/rem)
-set(LIBREM_INCLUDE_DIRS ${LIBREM_DIRS}/include)
-set(LIBREM_SRC_DIRS ${LIBREM_DIRS}/src)
-
-# ------------------------------------------------------------------------------
-# libre base source
-# ------------------------------------------------------------------------------
-
-set(LIBRE_BASE_DIR
-  types
-  fmt
-  list
-  dbg
-  mem
-  mbuf
-  tmr
-  sa
-  msg
-  sys
-  net
-  net/posix
-  net/linux
-  )
-foreach(one_dir ${LIBRE_BASE_DIR})
-  file(GLOB CUR_SRCS ${LIBRE_SRC_DIRS}/${one_dir}/*.c)
-  list(APPEND LIBRE_BASE_SRCS ${CUR_SRCS})
-endforeach()
-
-set(LIBRE_LINUX_SPEC_FILE
-  main/init.c
-  main/main.c
-  main/method.c
-  main/epoll.c
-  lock/lock.c
-  )
-foreach(one_file ${LIBRE_LINUX_SPEC_FILE})
-  list(APPEND LIBRE_BASE_SRCS ${LIBRE_SRC_DIRS}/${one_file})
-endforeach()
-
-# ------------------------------------------------------------------------------
-# definition for libre
-# ------------------------------------------------------------------------------
-
-add_definitions(
-  -DHAVE_EPOLL
-  -DHAVE_FORK
-  -DHAVE_GETIFADDRS
-  -DHAVE_GETOPT
-  -DHAVE_INET6
-  -DHAVE_INET_NTOP
-  -DHAVE_INET_PTON
-  -DHAVE_INTTYPES_H
-  -DHAVE_NET_ROUTE_H
-  -DHAVE_POLL
-  -DHAVE_PTHREAD
-  -DHAVE_PWD_H
-  -DHAVE_RESOLV
-  -DHAVE_ROUTE_LIST
-  -DHAVE_SELECT
-  -DHAVE_SELECT_H
-  -DHAVE_SETRLIMIT
-  -DHAVE_SIGNAL
-  -DHAVE_STDBOOL_H
-  -DHAVE_STRERROR_R
-  -DHAVE_STRINGS_H
-  -DHAVE_SYSLOG
-  -DHAVE_SYS_SYSCTL_H
-  -DHAVE_SYS_TIME_H
-  -DHAVE_UNAME
-  -DHAVE_UNISTD_H
-  -DVERSION=\"0.0.0\"
-  -DVER_MAJOR=0
-  -DVER_MINOR=0
-  -DVER_PATCH=0
-  )
+# google iotc
+if(WITH_IOTC)
+  set(IOTC_PREFIX ${PROJECT_BINARY_DIR}/third_party/iotc)
+  set(IOTC_INCLUDE_DIRS ${IOTC_PREFIX}/include)
+  set(IOTC_LIBRARIES ${IOTC_PREFIX}/lib)
+endif()
 
 # ------------------------------------------------------------------------------
 # Subdirectory
 # ------------------------------------------------------------------------------
 
-add_subdirectory(modules)
+add_subdirectory(third_party)
 add_subdirectory(examples)
 
