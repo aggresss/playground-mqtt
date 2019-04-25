@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# CMakeLists.txt for aggresss/playground-libre/examples
+# CMakeLists.txt for aggresss/playground-mqtt/examples
 # ------------------------------------------------------------------------------
 
 SUBDIRLIST(SUB_DIRS ${CMAKE_CURRENT_LIST_DIR})

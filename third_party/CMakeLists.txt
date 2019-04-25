@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# link-c-sdk/third_party CMakeLists.txt
+# CMakeLists.txt for aggresss/playground-mqtt/third_party
 # ------------------------------------------------------------------------------
 
 include(ExternalProject)
@@ -11,6 +11,7 @@ if(WITH_PAHO)
     UPDATE_COMMAND ""
     CMAKE_ARGS
       -DCMAKE_INSTALL_PREFIX:PATH=${PAHO_PREFIX}
+      -DCMAKE_TOOLCHAIN_FILE:PATH=${TOOLCHAIN_FILE}
       -DCMAKE_BUILD_TYPE:STRING=Debug
       -DPAHO_WITH_SSL:BOOL=FALSE
       -DPAHO_BUILD_DOCUMENTATION:BOOL=FALSE
