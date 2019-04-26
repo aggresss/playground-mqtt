@@ -19,5 +19,45 @@ if(WITH_PAHO)
       -DPAHO_BUILD_STATIC:BOOL=TRUE
     TEST_COMMAND ""
     )
-endif()
+endif(WITH_PAHO)
+
+if(WITH_IOTC)
+  ExternalProject_Add(external-iotc
+    BUILD_ALWAYS 1
+    URL https://github.com/GoogleCloudPlatform/iot-device-sdk-embedded-c/archive/v1.0.1.tar.gz
+    UPDATE_COMMAND ""
+    CONFIGURE_COMMAND ./autogen.sh &&
+      ./configure
+        CC=${CMAKE_C_COMPILER}
+        CXX=${CMAKE_CXX_COMPILER}
+        --enable-static=${THIRDPARTY_WITH_STATIC}
+        --enable-shared=${THIRDPARTY_WITH_SHARED}
+        --disable-debug
+        --host=${C_COMPILER_MACHINE}
+        --prefix=${WOLFSSL_PREFIX}
+    BUILD_COMMAND make
+    INSTALL_COMMAND make install
+    TEST_COMMAND ""
+    )
+endif(WITH_IOTC)
+
+if(WITH_OPENSSL)
+  ExternalProject_Add(external-openssl
+    BUILD_ALWAYS 1
+    URL https://github.com/openssl/openssl/archive/OpenSSL_1_1_1b.tar.gz
+    UPDATE_COMMAND ""
+    CONFIGURE_COMMAND
+      ./config
+      CC=${CMAKE_C_COMPILER}
+      CXX=${CMAKE_CXX_COMPILER}
+      -fPIC
+      --prefix=${OPENSSL_PREFIX}
+      --host=${C_COMPILER_MACHINE}
+      no-shared
+    BUILD_COMMAND make
+    INSTALL_COMMAND make install
+    TEST_COMMAND ""
+    )
+endif(WITH_OPENSSL)
+
 

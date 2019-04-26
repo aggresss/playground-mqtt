@@ -121,8 +121,10 @@ enable_testing()
 # ------------------------------------------------------------------------------
 
 option(BUILD_ALL "Build all submodule" OFF)
-option(WITH_PAHO "Build with eclipse paho" ON)
-option(WITH_GOOGLE_IOTC "Build with google iotc" ON)
+option(WITH_PAHO "Build with eclipse paho" OFF)
+option(WITH_GOOGLE_IOTC "Build with google iotc" OFF)
+option(WITH_OPENSSL "Build with openssl" ON)
+
 
 # ------------------------------------------------------------------------------
 # Common directory
@@ -143,6 +145,13 @@ if(WITH_IOTC)
   set(IOTC_PREFIX ${PROJECT_BINARY_DIR}/third_party/iotc)
   set(IOTC_INCLUDE_DIRS ${IOTC_PREFIX}/include)
   set(IOTC_LIBRARIES ${IOTC_PREFIX}/lib)
+endif()
+
+# openssl
+if(WITH_OPENSSL)
+  set(OPENSSL_PREFIX ${PROJECT_BINARY_DIR}/third_party/openssl)
+  set(OPENSSL_INCLUDE_DIRS ${OPENSSL_PREFIX}/include)
+  set(OPENSSL_LIBRARIES ${OPENSSL_PREFIX}/lib)
 endif()
 
 # ------------------------------------------------------------------------------
