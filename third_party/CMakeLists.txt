@@ -43,16 +43,17 @@ endif(WITH_IOTC)
 
 if(WITH_OPENSSL)
   ExternalProject_Add(external-openssl
-    BUILD_ALWAYS 1
+    BUILD_ALWAYS TRUE
+    BUILD_IN_SOURCE TRUE
     URL https://github.com/openssl/openssl/archive/OpenSSL_1_1_1b.tar.gz
     UPDATE_COMMAND ""
     CONFIGURE_COMMAND
-      ./config
-      CC=${CMAKE_C_COMPILER}
-      CXX=${CMAKE_CXX_COMPILER}
+      ./Configure
       -fPIC
+      no-asm
+      linux-generic32
       --prefix=${OPENSSL_PREFIX}
-      --host=${C_COMPILER_MACHINE}
+      --cross-compile-prefix=${CROSS_COMPILE_PREFIX}
       no-shared
     BUILD_COMMAND make
     INSTALL_COMMAND make install
