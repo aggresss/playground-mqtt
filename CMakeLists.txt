@@ -13,9 +13,8 @@ include(GNUInstallDirs)
 
 # MUST before project()
 if(CROSS_COMPILE)
-  set(CROSS_COMPILE_PREFIX ${CROSS_COMPILE}-)
-  set(CMAKE_C_COMPILER ${CROSS_COMPILE_PREFIX}gcc)
-  set(CMAKE_CXX_COMPILER ${CROSS_COMPILE_PREFIX}g++)
+  set(CMAKE_C_COMPILER ${CROSS_COMPILE}-gcc)
+  set(CMAKE_CXX_COMPILER ${CROSS_COMPILE}-g++)
   set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
   set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
   set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
@@ -30,8 +29,8 @@ if(CROSS_COMPILE)
 set(CMAKE_SYSTEM_NAME Linux)
 
 # specify the cross compiler
-set(CMAKE_C_COMPILER ${CROSS_COMPILE_PREFIX}gcc)
-set(CMAKE_CXX_COMPILER ${CROSS_COMPILE_PREFIX}g++)
+set(CMAKE_C_COMPILER ${CROSS_COMPILE}-gcc)
+set(CMAKE_CXX_COMPILER ${CROSS_COMPILE}-g++)
 
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
@@ -121,10 +120,12 @@ enable_testing()
 # ------------------------------------------------------------------------------
 
 option(BUILD_ALL "Build all submodule" OFF)
-option(WITH_PAHO "Build with eclipse paho" OFF)
-option(WITH_GOOGLE_IOTC "Build with google iotc" OFF)
-option(WITH_OPENSSL "Build with openssl" ON)
 
+option(WITH_PAHO "Build with eclipse paho" OFF)
+option(WITH_IOTC "Build with google iotc" OFF)
+option(WITH_OPENSSL "Build with openssl" OFF)
+option(WITH_MBEDTLS "Build with mbedtls" OFF)
+option(WITH_WOLFSSL "Build with wolfssl" ON)
 
 # ------------------------------------------------------------------------------
 # Common directory
@@ -152,6 +153,20 @@ if(WITH_OPENSSL)
   set(OPENSSL_PREFIX ${PROJECT_BINARY_DIR}/third_party/openssl)
   set(OPENSSL_INCLUDE_DIRS ${OPENSSL_PREFIX}/include)
   set(OPENSSL_LIBRARIES ${OPENSSL_PREFIX}/lib)
+endif()
+
+# mbedtls
+if(WITH_MBEDTLS)
+  set(MBEDTLS_PREFIX ${PROJECT_BINARY_DIR}/third_party/mbedtls)
+  set(MBEDTLS_INCLUDE_DIRS ${MBEDTLS_PREFIX}/include)
+  set(MBEDTLS_LIBRARIES ${MBEDTLS_PREFIX}/lib)
+endif()
+
+# wolfssl
+if(WITH_WOLFSSL)
+  set(WOLFSSL_PREFIX ${PROJECT_BINARY_DIR}/third_party/wolfssl)
+  set(WOLFSSL_INCLUDE_DIRS ${WOLFSSL_PREFIX}/include)
+  set(WOLFSSL_LIBRARIES ${WOLFSSL_PREFIX}/lib)
 endif()
 
 # ------------------------------------------------------------------------------
