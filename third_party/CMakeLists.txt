@@ -36,6 +36,7 @@ endif(WITH_IOTC)
 
 if(WITH_OPENSSL)
   ExternalProject_Add(external-openssl
+    SOURCE_DIR ${OPENSSL_PREFIX}
     BUILD_ALWAYS TRUE
     BUILD_IN_SOURCE TRUE
     URL https://github.com/openssl/openssl/archive/OpenSSL_1_1_1b.tar.gz
@@ -49,7 +50,7 @@ if(WITH_OPENSSL)
       --cross-compile-prefix=${C_COMPILER_PREFIX}
       no-shared
     BUILD_COMMAND make
-    INSTALL_COMMAND make install
+    INSTALL_COMMAND ""
     TEST_COMMAND ""
     )
 endif(WITH_OPENSSL)
