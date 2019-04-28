@@ -132,6 +132,7 @@ option(WITH_WOLFSSL "Build with wolfssl" OFF)
 # ------------------------------------------------------------------------------
 
 set(TOP_DIRS ${PROJECT_SOURCE_DIR})
+set(CONFIG_DIRS ${CMAKE_CURRENT_BINARY_DIR})
 set(THIRD_PARTY_DIRS ${PROJECT_SOURCE_DIR}/third_party)
 
 # paho
@@ -152,7 +153,7 @@ endif()
 if(WITH_OPENSSL)
   set(OPENSSL_PREFIX ${PROJECT_BINARY_DIR}/third_party/openssl)
   set(OPENSSL_INCLUDE_DIRS ${OPENSSL_PREFIX}/include)
-  set(OPENSSL_LIBRARIES ${OPENSSL_PREFIX}/lib)
+  set(OPENSSL_LIBRARIES ${OPENSSL_PREFIX})
 endif()
 
 # mbedtls
@@ -168,6 +169,16 @@ if(WITH_WOLFSSL)
   set(WOLFSSL_INCLUDE_DIRS ${WOLFSSL_PREFIX}/include)
   set(WOLFSSL_LIBRARIES ${WOLFSSL_PREFIX}/lib)
 endif()
+
+# ------------------------------------------------------------------------------
+# Configuration file
+# ------------------------------------------------------------------------------
+
+configure_file (
+    "${CMAKE_CURRENT_SOURCE_DIR}/config.h.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/config.h"
+    @ONLY)
+
 
 # ------------------------------------------------------------------------------
 # Subdirectory

@@ -1,9 +1,16 @@
 # ------------------------------------------------------------------------------
-# CMakeLists.txt for aggresss/playground-mqtt subdirectory
+# CMakeLists.txt for aggresss/playground-mqtt/example subdirectory
 # ------------------------------------------------------------------------------
+
+
 
 string(REGEX MATCH "[^/]+$" SUBMODULE ${CMAKE_CURRENT_LIST_DIR})
 option(${SUBMODULE} "Build ${SUBMODULE}" OFF)
+
+include_directories(${TOP_DIRS})
+include_directories(${CONFIG_DIRS})
+
+add_compile_options(-std=gnu99)
 
 if(${SUBMODULE} OR BUILD_ALL)
   # Build
@@ -13,10 +20,18 @@ if(${SUBMODULE} OR BUILD_ALL)
   endif()
 
   set(TEST_TARGET_1 "tls_server")
-  add_executable(${TEST_TARGET_1} server.c)
-  target_compile_options(${TEST_TARGET_1} PRIVATE -std=c99)
-  target_link_libraries(${TEST_TARGET_1} ssl crypto)
-  target_link_libraries(${TEST_TARGET_1} pthread)
+  add_executable(${TEST_TARGET_1} ${TEST_TARGET_1}.c)
+  target_link_libraries(${TEST_TARGET_1} ssl crypto pthread dl)
+  
+  set(TEST_TARGET_2 "tls_client")
+  add_executable(${TEST_TARGET_2} ${TEST_TARGET_2}.c)
+  target_link_libraries(${TEST_TARGET_2} ssl crypto pthread dl)
+  
+  set(TEST_TARGET_3 "tcp_server")
+  add_executable(${TEST_TARGET_3} ${TEST_TARGET_3}.c)
+
+  set(TEST_TARGET_4 "tcp_client")
+  add_executable(${TEST_TARGET_4} ${TEST_TARGET_4}.c)
 
 endif()
 
