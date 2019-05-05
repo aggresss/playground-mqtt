@@ -1,3 +1,7 @@
+/*
+ * http://openssl.cs.utah.edu/docs/crypto/BIO_s_accept.html
+ * */
+
 #include <stdio.h>
 #include <string.h>
 #include <openssl/bio.h>
