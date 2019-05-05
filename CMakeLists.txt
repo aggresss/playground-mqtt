@@ -123,7 +123,7 @@ option(BUILD_ALL "Build all submodule" OFF)
 
 option(WITH_PAHO "Build with eclipse paho" OFF)
 option(WITH_IOTC "Build with google iotc" OFF)
-option(WITH_OPENSSL "Build with openssl" ON)
+option(WITH_OPENSSL "Build with openssl" OFF)
 option(WITH_MBEDTLS "Build with mbedtls" OFF)
 option(WITH_WOLFSSL "Build with wolfssl" OFF)
 
