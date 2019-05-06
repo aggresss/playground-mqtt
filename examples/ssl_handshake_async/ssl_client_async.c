@@ -107,8 +107,8 @@ static void sslConnect(SSLCon* con, const char* host, short port)
             events &= ~POLLIN;
             log("return want write set events %d\n", events);
         } else if (err == SSL_ERROR_WANT_READ) {
-            events |= EPOLLIN;
-            events &= ~EPOLLOUT;
+            events |= POLLIN;
+            events &= ~POLLOUT;
             log("return want read set events %d\n", events);
         } else {
             log("SSL_do_handshake return %d error %d errno %d msg %s\n", r, err,
