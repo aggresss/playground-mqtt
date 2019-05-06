@@ -112,7 +112,7 @@ static int createServer(short port) {
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);
     addr.sin_addr.s_addr = INADDR_ANY;
-    int r = bind(fd,(struct sockaddr *)&addr, sizeof(struct sockaddr));
+    int r = bind(fd, (struct sockaddr *)&addr, sizeof(struct sockaddr));
     check0(r, "bind to 0.0.0.0:%d failed %d %s", port, errno, strerror(errno));
     r = listen(fd, 20);
     check0(r, "listen failed %d %s", errno, strerror(errno));
@@ -223,11 +223,11 @@ static void handleDataRead(Channel* ch) {
 static void handleRead(Channel* ch) {
     if (ch->fd == listenfd) {
         return handleAccept();
-    }
-    if (ch->sslConnected) {
+    } else if (ch->sslConnected) {
         return handleDataRead(ch);
+    } else {
+        return handleHandshake(ch);
     }
-    handleHandshake(ch);
 }
 
 static void handleWrite(Channel* ch) {
