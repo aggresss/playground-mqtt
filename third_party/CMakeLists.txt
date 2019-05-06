@@ -6,7 +6,7 @@ include(ExternalProject)
 
 if(WITH_PAHO)
   ExternalProject_Add(external-paho
-    BUILD_ALWAYS 1
+    BUILD_ALWAYS TRUE
     URL https://github.com/eclipse/paho.mqtt.c/archive/v1.3.0.tar.gz
     UPDATE_COMMAND ""
     CMAKE_ARGS
@@ -23,7 +23,7 @@ endif(WITH_PAHO)
 
 if(WITH_IOTC)
   ExternalProject_Add(external-iotc
-    BUILD_ALWAYS 1
+    BUILD_ALWAYS TRUE
     SOURCE_DIR ${IOTC_PREFIX}
     URL https://github.com/GoogleCloudPlatform/iot-device-sdk-embedded-c/archive/v1.0.1.tar.gz
     UPDATE_COMMAND ""
@@ -33,6 +33,26 @@ if(WITH_IOTC)
     TEST_COMMAND ""
     )
 endif(WITH_IOTC)
+
+if(WITH_LIBEVENT)
+  ExternalProject_Add(external-libevent
+    BUILD_ALWAYS TRUE
+    BUILD_IN_SOURCE TRUE
+    URL https://github.com/libevent/libevent/releases/download/release-2.1.8-stable/libevent-2.1.8-stable.tar.gz
+    UPDATE_COMMAND ""
+    CONFIGURE_COMMAND ./autogen.sh &&
+      ./configure
+        CC=${CMAKE_C_COMPILER}
+        CXX=${CMAKE_CXX_COMPILER}
+        --enable-static=${THIRDPARTY_WITH_STATIC}
+        --enable-shared=${THIRDPARTY_WITH_SHARED}
+        --host=${C_COMPILER_MACHINE}
+        --prefix=${LIBEVENT_PREFIX}
+    BUILD_COMMAND make
+    INSTALL_COMMAND make install
+    TEST_COMMAND ""
+    )
+endif(WITH_LIBEVENT)
 
 if(WITH_OPENSSL)
   ExternalProject_Add(external-openssl

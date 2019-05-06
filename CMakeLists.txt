@@ -123,6 +123,7 @@ option(BUILD_ALL "Build all submodule" OFF)
 
 option(WITH_PAHO "Build with eclipse paho" OFF)
 option(WITH_IOTC "Build with google iotc" OFF)
+option(WITH_LIBEVENT "Build with libevent" OFF)
 option(WITH_OPENSSL "Build with openssl" OFF)
 option(WITH_MBEDTLS "Build with mbedtls" OFF)
 option(WITH_WOLFSSL "Build with wolfssl" OFF)
@@ -147,6 +148,13 @@ if(WITH_IOTC)
   set(IOTC_PREFIX ${PROJECT_BINARY_DIR}/third_party/iotc)
   set(IOTC_INCLUDE_DIRS ${IOTC_PREFIX}/include)
   set(IOTC_LIBRARIES ${IOTC_PREFIX}/lib)
+endif()
+
+# libevent
+if(WITH_LIBEVENT)
+  set(LIBEVENT_PREFIX ${PROJECT_BINARY_DIR}/third_party/libevent)
+  set(LIBEVENT_INCLUDE_DIRS ${PAHO_PREFIX}/include)
+  set(LIBEVENT_LIBRARIES ${PAHO_PREFIX}/lib)
 endif()
 
 # openssl
@@ -178,7 +186,6 @@ configure_file (
     "${CMAKE_CURRENT_SOURCE_DIR}/config.h.in"
     "${CMAKE_CURRENT_BINARY_DIR}/config.h"
     @ONLY)
-
 
 # ------------------------------------------------------------------------------
 # Subdirectory
