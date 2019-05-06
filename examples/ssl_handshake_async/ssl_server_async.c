@@ -43,7 +43,7 @@ typedef struct Channel_s {
     bool tcpConnected;
     bool sslConnected;
     int events;
-}Channel;
+} Channel;
 
 
 static Channel * create_channel(int fd, int events) {
@@ -82,7 +82,7 @@ static void update_channel(Channel * ch) {
     check0(r, "epoll_ctl mod failed %d %s", errno, strerror(errno));
 }
 
-int setNonBlock(int fd, bool value) {
+static int setNonBlock(int fd, bool value) {
     int flags = fcntl(fd, F_GETFL, 0);
     if (flags < 0) {
         return errno;
@@ -94,7 +94,7 @@ int setNonBlock(int fd, bool value) {
 }
 
 
-void addEpollFd(int epollfd, Channel* ch) {
+static void addEpollFd(int epollfd, Channel* ch) {
     struct epoll_event ev;
     memset(&ev, 0, sizeof(ev));
     ev.events = ch->events;
@@ -104,7 +104,7 @@ void addEpollFd(int epollfd, Channel* ch) {
     check0(r, "epoll_ctl add failed %d %s", errno, strerror(errno));
 }
 
-int createServer(short port) {
+static int createServer(short port) {
     int fd = socket(AF_INET, SOCK_STREAM|SOCK_CLOEXEC, 0);
     setNonBlock(fd, 1);
     struct sockaddr_in addr;
@@ -120,7 +120,7 @@ int createServer(short port) {
     return fd;
 }
 
-void handleAccept() {
+static void handleAccept() {
     struct sockaddr_in raddr;
     socklen_t rsz = sizeof(raddr);
     int cfd;
@@ -143,7 +143,7 @@ void handleAccept() {
     }
 }
 
-void handleHandshake(Channel* ch) {
+static void handleHandshake(Channel* ch) {
     if (!ch->tcpConnected) {
         struct pollfd pfd;
         pfd.fd = ch->fd;
@@ -195,7 +195,7 @@ void handleHandshake(Channel* ch) {
     }
 }
 
-void handleDataRead(Channel* ch) {
+static void handleDataRead(Channel* ch) {
     char buf[4096];
     int rd = SSL_read(ch->ssl, buf, sizeof buf);
     int ssle = SSL_get_error(ch->ssl, rd);
@@ -220,7 +220,7 @@ void handleDataRead(Channel* ch) {
     }
 }
 
-void handleRead(Channel* ch) {
+static void handleRead(Channel* ch) {
     if (ch->fd == listenfd) {
         return handleAccept();
     }
@@ -230,7 +230,7 @@ void handleRead(Channel* ch) {
     handleHandshake(ch);
 }
 
-void handleWrite(Channel* ch) {
+static void handleWrite(Channel* ch) {
     if (!ch->sslConnected) {
         return handleHandshake(ch);
     }
@@ -239,7 +239,7 @@ void handleWrite(Channel* ch) {
     update_channel(ch);
 }
 
-void initSSL() {
+static void initSSL() {
     SSL_load_error_strings ();
     int r = SSL_library_init ();
     check0(!r, "SSL_library_init failed");
@@ -258,7 +258,7 @@ void initSSL() {
 
 int g_stop = 0;
 
-void loop_once(int epollfd, int waitms) {
+static void loop_once(int epollfd, int waitms) {
     const int kMaxEvents = 20;
     struct epoll_event activeEvs[kMaxEvents];
     int n = epoll_wait(epollfd, activeEvs, kMaxEvents, waitms);
@@ -277,7 +277,7 @@ void loop_once(int epollfd, int waitms) {
     }
 }
 
-void handleInterrupt(int sig) {
+static void handleInterrupt(int sig) {
     g_stop = true;
 }
 

@@ -31,14 +31,15 @@
 #define log(...) do { printf(__VA_ARGS__); fflush(stdout); } while(0)
 #define check0(x, ...) if(x) do { log( __VA_ARGS__); exit(1); } while(0)
 #define check1(x, ...) if(!(x)) do { log( __VA_ARGS__); exit(1); } while(0)
-SSL_CTX *sslContext;
+
+SSL_CTX *g_sslContext;
 
 typedef struct SSLCon_s {
     int socket;
     SSL *sslHandle;
 }SSLCon;
 
-int setNonBlock(int fd, bool value)
+static int setNonBlock(int fd, bool value)
 {
     int flags = fcntl(fd, F_GETFL, 0);
     if (flags < 0) {
@@ -51,7 +52,7 @@ int setNonBlock(int fd, bool value)
 }
 
 // Establish a regular tcp connection
-int tcpConnect(const char* svr, short port)
+static int tcpConnect(const char* svr, short port)
 {
     struct hostent *host = gethostbyname(svr);
     int handle = socket(AF_INET, SOCK_STREAM, 0);
@@ -81,12 +82,12 @@ int tcpConnect(const char* svr, short port)
     return handle;
 }
 
-void sslConnect(SSLCon* con, const char* host, short port)
+static void sslConnect(SSLCon* con, const char* host, short port)
 {
     bzero(con, sizeof(*con));
     con->socket = tcpConnect(host, port);
 
-    con->sslHandle = SSL_new(sslContext);
+    con->sslHandle = SSL_new(g_sslContext);
     if (con->sslHandle == NULL) {
         ERR_print_errors_fp(stderr);
         check1(0, "SSL_new failed");
@@ -128,7 +129,7 @@ void sslConnect(SSLCon* con, const char* host, short port)
     log("ssl connected \n");
 }
 
-void sslRead(SSLCon* con)
+static void sslRead(SSLCon* con)
 {
     char buf[256];
     int rd = 0;
@@ -159,7 +160,7 @@ void sslRead(SSLCon* con)
     log("read %d bytes contents:\n%.*s\n", rd, rd, buf);
 }
 
-void sslWrite(SSLCon* con, const char *text)
+static void sslWrite(SSLCon* con, const char *text)
 {
     int len = strlen(text);
     int wd = SSL_write(con->sslHandle, text, len);
@@ -177,16 +178,17 @@ int main(int argc, const char * argv[])
     }
     SSL_load_error_strings ();
     SSL_library_init ();
-    sslContext = SSL_CTX_new(SSLv23_client_method());
-    if (sslContext == NULL) {
+    g_sslContext = SSL_CTX_new(SSLv23_client_method());
+    if (g_sslContext == NULL) {
         ERR_print_errors_fp(stderr);
         return -1;
     }
+
     sslConnect(&con, argv[1], atoi(argv[2]));
     sslWrite(&con, "GET /\r\n\r\n");
     sslRead(&con);
-    SSL_CTX_free(sslContext);
 
+    SSL_CTX_free(g_sslContext);
     SSL_shutdown(con.sslHandle);
     SSL_free (con.sslHandle);
     close(con.socket);
