@@ -2,24 +2,23 @@
  * Fork from https://github.com/yedf/openssl-example/blob/master/async-ssl-cli.cc
  * */
 
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <fcntl.h>
-#include <netdb.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <unistd.h>
 #include <errno.h>
 #include <string.h>
-#include <poll.h>
-#include <sys/epoll.h>
 #include <signal.h>
+
+#include <fcntl.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <poll.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/types.h>
+
 #include <openssl/bio.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
