@@ -12,7 +12,7 @@ if(WITH_PAHO)
     URL https://github.com/eclipse/paho.mqtt.c/archive/v1.3.0.tar.gz
     UPDATE_COMMAND ""
     CMAKE_ARGS
-      -DCMAKE_INSTALL_PREFIX:PATH=${PAHO_PREFIX}
+      -DCMAKE_INSTALL_PREFIX:PATH=${PROJECT_BINARY_DIR}/third_party/paho
       -DCMAKE_TOOLCHAIN_FILE:PATH=${TOOLCHAIN_FILE}
       -DCMAKE_BUILD_TYPE:STRING=Debug
       -DPAHO_WITH_SSL:BOOL=FALSE
@@ -53,7 +53,7 @@ if(WITH_LIBEVENT)
         --enable-static=${THIRDPARTY_WITH_STATIC}
         --enable-shared=${THIRDPARTY_WITH_SHARED}
         --host=${C_COMPILER_MACHINE}
-        --prefix=${LIBEVENT_PREFIX}
+        --prefix=${PROJECT_BINARY_DIR}/third_party/libevent
     BUILD_COMMAND make
     INSTALL_COMMAND make install
     TEST_COMMAND ""
@@ -74,7 +74,7 @@ if(WITH_OPENSSL)
       -fPIC
       no-asm
       linux-generic32
-      --prefix=${OPENSSL_PREFIX}
+      --prefix=${PROJECT_BINARY_DIR}/third_party/openssl
       --cross-compile-prefix=${C_COMPILER_PREFIX}
       no-shared
     BUILD_COMMAND make
@@ -91,7 +91,7 @@ if(WITH_MBEDTLS)
     URL https://github.com/ARMmbed/mbedtls/archive/mbedtls-2.16.1.tar.gz
     UPDATE_COMMAND ""
     CMAKE_ARGS
-      -DCMAKE_INSTALL_PREFIX:PATH=${MBEDTLS_PREFIX}
+      -DCMAKE_INSTALL_PREFIX:PATH=${PROJECT_BINARY_DIR}/third_party/mbedtls
       -DCMAKE_TOOLCHAIN_FILE:PATH=${TOOLCHAIN_FILE}
       -DCMAKE_BUILD_TYPE:STRING=Debug
       -DENABLE_TESTING:BOOL=OFF
@@ -116,7 +116,7 @@ if(WITH_WOLFSSL)
         --enable-shared=${THIRDPARTY_WITH_SHARED}
         --disable-debug
         --host=${C_COMPILER_MACHINE}
-        --prefix=${WOLFSSL_PREFIX}
+        --prefix=${PROJECT_BINARY_DIR}/third_party/wolfssl
     BUILD_COMMAND make
     INSTALL_COMMAND make install
     TEST_COMMAND ""

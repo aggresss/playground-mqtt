@@ -13,10 +13,9 @@ add_compile_options(-std=gnu99)
 
 if(${SUBMODULE} OR BUILD_ALL)
   # Build
-  if(WITH_PAHO)
-    include_directories(${PAHO_PREFIX}/include)
-    link_directories(${PAHO_PREFIX}/lib)
-  endif()
+  include_directories(${PAHO_PREFIX}/include)
+  link_directories(${PAHO_PREFIX}/lib)
+  include_directories(${DEPS_PREFIX})
 
   set(TEST_TARGET_1 "qnlinking_mqtt")
   add_executable(${TEST_TARGET_1} ${TEST_TARGET_1}.c)
