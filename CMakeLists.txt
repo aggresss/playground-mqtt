@@ -121,13 +121,6 @@ enable_testing()
 
 option(BUILD_ALL "Build all submodule" OFF)
 
-option(WITH_PAHO "Build with eclipse paho" OFF)
-option(WITH_IOTC "Build with google iotc" OFF)
-option(WITH_LIBEVENT "Build with libevent" OFF)
-option(WITH_OPENSSL "Build with openssl" OFF)
-option(WITH_MBEDTLS "Build with mbedtls" OFF)
-option(WITH_WOLFSSL "Build with wolfssl" OFF)
-
 # ------------------------------------------------------------------------------
 # Common directory
 # ------------------------------------------------------------------------------
@@ -135,48 +128,6 @@ option(WITH_WOLFSSL "Build with wolfssl" OFF)
 set(TOP_DIRS ${PROJECT_SOURCE_DIR})
 set(CONFIG_DIRS ${CMAKE_CURRENT_BINARY_DIR})
 set(THIRD_PARTY_DIRS ${PROJECT_SOURCE_DIR}/third_party)
-
-# paho
-if(WITH_PAHO)
-  set(PAHO_PREFIX ${PROJECT_BINARY_DIR}/third_party/paho)
-  set(PAHO_INCLUDE_DIRS ${PAHO_PREFIX}/include)
-  set(PAHO_LIBRARIES ${PAHO_PREFIX}/lib)
-endif()
-
-# google iotc
-if(WITH_IOTC)
-  set(IOTC_PREFIX ${PROJECT_BINARY_DIR}/third_party/iotc)
-  set(IOTC_INCLUDE_DIRS ${IOTC_PREFIX}/include)
-  set(IOTC_LIBRARIES ${IOTC_PREFIX}/lib)
-endif()
-
-# libevent
-if(WITH_LIBEVENT)
-  set(LIBEVENT_PREFIX ${PROJECT_BINARY_DIR}/third_party/libevent)
-  set(LIBEVENT_INCLUDE_DIRS ${PAHO_PREFIX}/include)
-  set(LIBEVENT_LIBRARIES ${PAHO_PREFIX}/lib)
-endif()
-
-# openssl
-if(WITH_OPENSSL)
-  set(OPENSSL_PREFIX ${PROJECT_BINARY_DIR}/third_party/openssl)
-  set(OPENSSL_INCLUDE_DIRS ${OPENSSL_PREFIX}/include)
-  set(OPENSSL_LIBRARIES ${OPENSSL_PREFIX})
-endif()
-
-# mbedtls
-if(WITH_MBEDTLS)
-  set(MBEDTLS_PREFIX ${PROJECT_BINARY_DIR}/third_party/mbedtls)
-  set(MBEDTLS_INCLUDE_DIRS ${MBEDTLS_PREFIX}/include)
-  set(MBEDTLS_LIBRARIES ${MBEDTLS_PREFIX}/lib)
-endif()
-
-# wolfssl
-if(WITH_WOLFSSL)
-  set(WOLFSSL_PREFIX ${PROJECT_BINARY_DIR}/third_party/wolfssl)
-  set(WOLFSSL_INCLUDE_DIRS ${WOLFSSL_PREFIX}/include)
-  set(WOLFSSL_LIBRARIES ${WOLFSSL_PREFIX}/lib)
-endif()
 
 # ------------------------------------------------------------------------------
 # Configuration file

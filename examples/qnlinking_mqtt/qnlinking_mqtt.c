@@ -3,11 +3,11 @@
 #include <string.h>
 #include <unistd.h>
 #include "MQTTAsync.h"
-#define ADDRESS     "tcp://link.router7.com:1883"
-#define CLIENTID    "ExampleClientSub"
-#define TOPIC       "MQTT Examples"
-#define PAYLOAD     "Hello World!"
-#define QOS         1
+#define ADDRESS     "ws://mqtt.qnlinking.com:1883"
+#define CLIENTID    ""
+#define TOPIC       ""
+#define PAYLOAD     ""
+#define QOS         0
 #define TIMEOUT     10000L
 volatile MQTTAsync_token deliveredtoken;
 int disc_finished = 0;

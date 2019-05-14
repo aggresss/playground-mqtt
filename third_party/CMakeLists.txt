@@ -4,7 +4,9 @@
 
 include(ExternalProject)
 
+option(WITH_PAHO "Build with eclipse paho" OFF)
 if(WITH_PAHO)
+  set(PAHO_PREFIX ${PROJECT_BINARY_DIR}/third_party/paho PARENT_SCOPE)
   ExternalProject_Add(external-paho
     BUILD_ALWAYS TRUE
     URL https://github.com/eclipse/paho.mqtt.c/archive/v1.3.0.tar.gz
@@ -21,7 +23,9 @@ if(WITH_PAHO)
     )
 endif(WITH_PAHO)
 
+option(WITH_IOTC "Build with google iotc" OFF)
 if(WITH_IOTC)
+  set(IOTC_PREFIX ${PROJECT_BINARY_DIR}/third_party/iotc PARENT_SCOPE)
   ExternalProject_Add(external-iotc
     BUILD_ALWAYS TRUE
     SOURCE_DIR ${IOTC_PREFIX}
@@ -34,7 +38,9 @@ if(WITH_IOTC)
     )
 endif(WITH_IOTC)
 
+option(WITH_LIBEVENT "Build with libevent" OFF)
 if(WITH_LIBEVENT)
+  set(LIBEVENT_PREFIX ${PROJECT_BINARY_DIR}/third_party/libevent PARENT_SCOPE)
   ExternalProject_Add(external-libevent
     BUILD_ALWAYS TRUE
     BUILD_IN_SOURCE TRUE
@@ -54,7 +60,9 @@ if(WITH_LIBEVENT)
     )
 endif(WITH_LIBEVENT)
 
+option(WITH_OPENSSL "Build with openssl" OFF)
 if(WITH_OPENSSL)
+  set(OPENSSL_PREFIX ${PROJECT_BINARY_DIR}/third_party/openssl PARENT_SCOPE)
   ExternalProject_Add(external-openssl
     SOURCE_DIR ${OPENSSL_PREFIX}
     BUILD_ALWAYS TRUE
@@ -75,7 +83,9 @@ if(WITH_OPENSSL)
     )
 endif(WITH_OPENSSL)
 
+option(WITH_MBEDTLS "Build with mbedtls" OFF)
 if(WITH_MBEDTLS)
+  set(MBEDTLS_PREFIX ${PROJECT_BINARY_DIR}/third_party/mbedtls PARENT_SCOPE)
   ExternalProject_Add(external-mbedtls
     BUILD_ALWAYS TRUE
     URL https://github.com/ARMmbed/mbedtls/archive/mbedtls-2.16.1.tar.gz
@@ -90,7 +100,9 @@ if(WITH_MBEDTLS)
     )
 endif(WITH_MBEDTLS)
 
+option(WITH_WOLFSSL "Build with wolfssl" OFF)
 if(WITH_WOLFSSL)
+  set(WOLFSSL_PREFIX ${PROJECT_BINARY_DIR}/third_party/wolfssl PARENT_SCOPE)
   ExternalProject_Add(external-wolfSSL
     BUILD_ALWAYS TRUE
     BUILD_IN_SOURCE TRUE
@@ -110,3 +122,19 @@ if(WITH_WOLFSSL)
     TEST_COMMAND ""
     )
 endif(WITH_WOLFSSL)
+
+option(WITH_DEPS "Build with deps" ON)
+if(WITH_DEPS)
+  set(DEPS_PREFIX ${PROJECT_BINARY_DIR}/third_party/deps PARENT_SCOPE)
+  ExternalProject_Add(external-deps
+    BUILD_ALWAYS TRUE
+    SOURCE_DIR ${DEPS_PREFIX}
+    URL https://github.com/aggresss/deps/archive/v1.0.tar.gz
+    UPDATE_COMMAND ""
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    INSTALL_COMMAND ""
+    TEST_COMMAND ""
+    )
+endif(WITH_DEPS)
+
