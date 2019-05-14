@@ -14,8 +14,8 @@ add_compile_options(-std=gnu99)
 if(${SUBMODULE} OR BUILD_ALL)
   # Build
   if(WITH_OPENSSL)
-    include_directories(${OPENSSL_INCLUDE_DIRS})
-    link_directories(${OPENSSL_LIBRARIES})
+    include_directories(${OPENSSL_PREFIX}/include)
+    link_directories(${OPENSSL_PREFIX}/lib)
   endif()
 
   set(TEST_TARGET_1 "bio_tcp_server")

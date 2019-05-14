@@ -14,8 +14,8 @@ add_compile_options(-std=gnu99)
 if(${SUBMODULE} OR BUILD_ALL)
   # Build
   if(WITH_MBEDTLS)
-    include_directories(${MBEDTLS_INCLUDE_DIRS})
-    link_directories(${MBEDTLS_LIBRARIES})
+    include_directories(${MBEDTLS_PREFIX}/include)
+    link_directories(${MBEDTLS_PREFIX}/lib)
   endif()
 
   set(TEST_TARGET_1 "tls_server")

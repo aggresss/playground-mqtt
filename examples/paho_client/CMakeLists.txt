@@ -14,8 +14,8 @@ add_compile_options(-std=gnu99)
 if(${SUBMODULE} OR BUILD_ALL)
   # Build
   if(WITH_PAHO)
-    include_directories(${PAHO_INCLUDE_DIRS})
-    link_directories(${PAHO_LIBRARIES})
+    include_directories(${PAHO_PREFIX}/include)
+    link_directories(${PAHO_PREFIX}/lib)
   endif()
 
   set(TEST_TARGET_1 "paho_async")
