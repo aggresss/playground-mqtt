@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+#include "hmac_sha1/hmac_sha1.h"
+#include "cJSON/cJSON.h"
+#include "b64/urlsafe_b64.h"
+
 #include "MQTTAsync.h"
 #define ADDRESS     "ws://mqtt.qnlinking.com:1883"
 #define CLIENTID    ""
@@ -13,6 +18,65 @@ volatile MQTTAsync_token deliveredtoken;
 int disc_finished = 0;
 int subscribed = 0;
 int finished = 0;
+
+
+
+
+static int GetUsernameSign(char *_pUsername, int *_pLen, const char *_pDak)
+{
+        char query[256] = {0};
+        long timestamp = 0.0;
+        timestamp = (long)time(NULL);
+        if (!_pDak) {
+                return LINK_MQTT_ERROR;
+        }
+        *_pLen = sprintf(query, "dak=%s&timestamp=%ld&version=v1", _pDak, timestamp);
+        if (*_pLen <= 0) {
+                return LINK_MQTT_ERROR;
+        }
+        strncpy(_pUsername, query, *_pLen + 1);
+        return LINK_MQTT_SUCCESS;
+}
+
+
+static int GetPasswordSign(const char *_pInput, int _nInLen,
+                char *_pOutput, int *_pOutLen, const char *_pDsk)
+{
+        int ret = 0;
+        char hsha1[20] = {0};
+
+        if (!_pInput || !_pDsk) {
+                return LINK_MQTT_ERROR;
+        }
+        ret = hmac_sha1(_pDsk, strlen(_pDsk), _pInput, _nInLen, hsha1, sizeof(hsha1));
+
+        if (ret != 20) {
+                return LINK_MQTT_ERROR;
+        }
+        int outlen = urlsafe_b64_encode(hsha1, 20, _pOutput, _pOutLen);
+        *_pOutLen = outlen;
+
+        return LINK_MQTT_SUCCESS;
+}
+
+static int UpdateUserPasswd(const void *_pInstance)
+{
+        if (_pInstance) {
+                struct MqttInstance* pInstance = (struct MqttInstance*) (_pInstance);
+                int nUsernameLen = 0;
+                int nPasswdLen = 0;
+                GetUsernameSign(pInstance->options.userInfo.pUsername, &nUsernameLen, gLinkDAK);
+                GetPasswordSign(pInstance->options.userInfo.pUsername, nUsernameLen,
+                                pInstance->options.userInfo.pPassword, &nPasswdLen, gLinkDSK);
+                return LINK_MQTT_SUCCESS;
+        }
+        return LINK_MQTT_ERROR;
+}
+
+
+
+
+
 
 int msgarrvd(void *context, char *topicName, int topicLen, MQTTAsync_message *message)
 {
