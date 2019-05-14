@@ -8,7 +8,6 @@ option(WITH_PAHO "Build with eclipse paho" OFF)
 if(WITH_PAHO)
   set(PAHO_PREFIX ${PROJECT_BINARY_DIR}/third_party/paho PARENT_SCOPE)
   ExternalProject_Add(external-paho
-    BUILD_ALWAYS TRUE
     URL https://github.com/eclipse/paho.mqtt.c/archive/v1.3.0.tar.gz
     UPDATE_COMMAND ""
     CMAKE_ARGS
@@ -18,6 +17,7 @@ if(WITH_PAHO)
       -DPAHO_WITH_SSL:BOOL=FALSE
       -DPAHO_BUILD_DOCUMENTATION:BOOL=FALSE
       -DPAHO_BUILD_SAMPLES:BOOL=FALSE
+      -DPAHO_ENABLE_TESTING:BOOL=FALSE
       -DPAHO_BUILD_STATIC:BOOL=TRUE
     TEST_COMMAND ""
     )
@@ -27,7 +27,6 @@ option(WITH_IOTC "Build with google iotc" OFF)
 if(WITH_IOTC)
   set(IOTC_PREFIX ${PROJECT_BINARY_DIR}/third_party/iotc PARENT_SCOPE)
   ExternalProject_Add(external-iotc
-    BUILD_ALWAYS TRUE
     SOURCE_DIR ${IOTC_PREFIX}
     URL https://github.com/GoogleCloudPlatform/iot-device-sdk-embedded-c/archive/v1.0.1.tar.gz
     UPDATE_COMMAND ""
@@ -42,7 +41,6 @@ option(WITH_LIBEVENT "Build with libevent" OFF)
 if(WITH_LIBEVENT)
   set(LIBEVENT_PREFIX ${PROJECT_BINARY_DIR}/third_party/libevent PARENT_SCOPE)
   ExternalProject_Add(external-libevent
-    BUILD_ALWAYS TRUE
     BUILD_IN_SOURCE TRUE
     URL https://github.com/libevent/libevent/releases/download/release-2.1.8-stable/libevent-2.1.8-stable.tar.gz
     UPDATE_COMMAND ""
@@ -65,7 +63,6 @@ if(WITH_OPENSSL)
   set(OPENSSL_PREFIX ${PROJECT_BINARY_DIR}/third_party/openssl PARENT_SCOPE)
   ExternalProject_Add(external-openssl
     SOURCE_DIR ${OPENSSL_PREFIX}
-    BUILD_ALWAYS TRUE
     BUILD_IN_SOURCE TRUE
     URL https://github.com/openssl/openssl/archive/OpenSSL_1_1_1b.tar.gz
     UPDATE_COMMAND ""
@@ -87,7 +84,6 @@ option(WITH_MBEDTLS "Build with mbedtls" OFF)
 if(WITH_MBEDTLS)
   set(MBEDTLS_PREFIX ${PROJECT_BINARY_DIR}/third_party/mbedtls PARENT_SCOPE)
   ExternalProject_Add(external-mbedtls
-    BUILD_ALWAYS TRUE
     URL https://github.com/ARMmbed/mbedtls/archive/mbedtls-2.16.1.tar.gz
     UPDATE_COMMAND ""
     CMAKE_ARGS
@@ -104,7 +100,6 @@ option(WITH_WOLFSSL "Build with wolfssl" OFF)
 if(WITH_WOLFSSL)
   set(WOLFSSL_PREFIX ${PROJECT_BINARY_DIR}/third_party/wolfssl PARENT_SCOPE)
   ExternalProject_Add(external-wolfSSL
-    BUILD_ALWAYS TRUE
     BUILD_IN_SOURCE TRUE
     URL https://github.com/wolfSSL/wolfssl/archive/v4.0.0-stable.tar.gz
     UPDATE_COMMAND ""
@@ -127,7 +122,6 @@ option(WITH_DEPS "Build with deps" ON)
 if(WITH_DEPS)
   set(DEPS_PREFIX ${PROJECT_BINARY_DIR}/third_party/deps PARENT_SCOPE)
   ExternalProject_Add(external-deps
-    BUILD_ALWAYS TRUE
     SOURCE_DIR ${DEPS_PREFIX}
     URL https://github.com/aggresss/deps/archive/v1.0.tar.gz
     UPDATE_COMMAND ""
