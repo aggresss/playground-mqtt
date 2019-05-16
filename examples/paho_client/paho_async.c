@@ -108,6 +108,13 @@ void connlost(void *context, char *cause)
 //        }
 }
 
+static void traceCallback(enum MQTTASYNC_TRACE_LEVELS level, char* message)
+{
+    printf("[ %d ]: %s\n", level, message);
+    return;
+}
+
+
 int main(int argc, char* argv[])
 {
         MQTTAsync client;
@@ -117,6 +124,9 @@ int main(int argc, char* argv[])
         MQTTAsync_token token;
         int rc;
         int ch;
+        MQTTAsync_setTraceLevel(MQTTASYNC_TRACE_MAXIMUM);
+        MQTTAsync_setTraceCallback(traceCallback);
+
         MQTTAsync_create(&client, ADDRESS, CLIENTID, MQTTCLIENT_PERSISTENCE_NONE, NULL);
         MQTTAsync_setCallbacks(client, NULL, connlost, msgarrvd, NULL);
         conn_opts.keepAliveInterval = 20;
