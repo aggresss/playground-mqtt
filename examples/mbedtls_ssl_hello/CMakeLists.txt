@@ -25,6 +25,10 @@ if(${SUBMODULE} OR BUILD_ALL)
   set(TEST_TARGET_2 "tls_client")
   add_executable(${TEST_TARGET_2} ${TEST_TARGET_2}.c)
   target_link_libraries(${TEST_TARGET_2} mbedtls mbedx509 mbedcrypto)
+  
+  set(TEST_TARGET_3 "tls_client2")
+  add_executable(${TEST_TARGET_3} ${TEST_TARGET_3}.c query_config.c)
+  target_link_libraries(${TEST_TARGET_3} mbedtls mbedx509 mbedcrypto)
 
 endif()
 
