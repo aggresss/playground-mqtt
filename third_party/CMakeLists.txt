@@ -4,25 +4,6 @@
 
 include(ExternalProject)
 
-option(WITH_PAHO "Build with eclipse paho" OFF)
-if(WITH_PAHO)
-  ExternalProject_Add(external-paho
-    URL https://github.com/eclipse/paho.mqtt.c/archive/v1.3.0.tar.gz
-    UPDATE_COMMAND ""
-    CMAKE_ARGS
-      -DCMAKE_INSTALL_PREFIX:PATH=${PROJECT_BINARY_DIR}/third_party/paho
-      -DCMAKE_TOOLCHAIN_FILE:PATH=${TOOLCHAIN_FILE}
-      -DCMAKE_BUILD_TYPE:STRING=Debug
-      -DPAHO_WITH_SSL:BOOL=FALSE
-      -DPAHO_BUILD_DOCUMENTATION:BOOL=FALSE
-      -DPAHO_BUILD_SAMPLES:BOOL=FALSE
-      -DPAHO_ENABLE_TESTING:BOOL=FALSE
-      -DPAHO_BUILD_STATIC:BOOL=TRUE
-    TEST_COMMAND ""
-    )
-    set(PAHO_PREFIX ${PROJECT_BINARY_DIR}/third_party/paho PARENT_SCOPE)
-endif(WITH_PAHO)
-
 option(WITH_IOTC "Build with google iotc" OFF)
 if(WITH_IOTC)
   ExternalProject_Add(external-iotc
@@ -61,7 +42,6 @@ endif(WITH_LIBEVENT)
 option(WITH_OPENSSL "Build with openssl" OFF)
 if(WITH_OPENSSL)
   ExternalProject_Add(external-openssl
-    SOURCE_DIR ${PROJECT_BINARY_DIR}/third_party/openssl
     BUILD_IN_SOURCE TRUE
     URL https://github.com/openssl/openssl/archive/OpenSSL_1_1_1b.tar.gz
     UPDATE_COMMAND ""
@@ -74,7 +54,7 @@ if(WITH_OPENSSL)
       --cross-compile-prefix=${C_COMPILER_PREFIX}
       no-shared
     BUILD_COMMAND make
-    INSTALL_COMMAND ""
+    INSTALL_COMMAND make install
     TEST_COMMAND ""
     )
     set(OPENSSL_PREFIX ${PROJECT_BINARY_DIR}/third_party/openssl PARENT_SCOPE)
@@ -118,11 +98,12 @@ if(WITH_WOLFSSL)
     set(WOLFSSL_PREFIX ${PROJECT_BINARY_DIR}/third_party/wolfssl PARENT_SCOPE)
 endif(WITH_WOLFSSL)
 
-option(WITH_DEPS "Build with deps" ON)
+option(WITH_DEPS "Build with deps" OFF)
 if(WITH_DEPS)
   ExternalProject_Add(external-deps
     SOURCE_DIR ${PROJECT_BINARY_DIR}/third_party/deps
-    URL https://github.com/aggresss/deps/archive/v1.0.tar.gz
+    GIT_REPOSITORY https://github.com/aggresss/deps.git
+    GIT_PROGRESS TRUE
     UPDATE_COMMAND ""
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
@@ -132,3 +113,23 @@ if(WITH_DEPS)
     set(DEPS_PREFIX ${PROJECT_BINARY_DIR}/third_party/deps PARENT_SCOPE)
 endif(WITH_DEPS)
 
+option(WITH_PAHO "Build with eclipse paho" OFF)
+if(WITH_PAHO)
+  ExternalProject_Add(external-paho
+    DEPENDS external-openssl
+    URL https://github.com/eclipse/paho.mqtt.c/archive/v1.3.0.tar.gz
+    UPDATE_COMMAND ""
+    CMAKE_ARGS
+      -DCMAKE_INSTALL_PREFIX:PATH=${PROJECT_BINARY_DIR}/third_party/paho
+      -DCMAKE_TOOLCHAIN_FILE:PATH=${TOOLCHAIN_FILE}
+      -DCMAKE_BUILD_TYPE:STRING=Debug
+      -DPAHO_WITH_SSL:BOOL=TRUE
+      -DOPENSSL_SEARCH_PATH:PATH=${PROJECT_BINARY_DIR}/third_party/openssl
+      -DPAHO_BUILD_DOCUMENTATION:BOOL=FALSE
+      -DPAHO_BUILD_SAMPLES:BOOL=TRUE
+      -DPAHO_ENABLE_TESTING:BOOL=FALSE
+      -DPAHO_BUILD_STATIC:BOOL=TRUE
+    TEST_COMMAND ""
+    )
+    set(PAHO_PREFIX ${PROJECT_BINARY_DIR}/third_party/paho PARENT_SCOPE)
+endif(WITH_PAHO)
