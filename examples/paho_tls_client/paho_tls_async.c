@@ -148,6 +148,7 @@ int main(int argc, char* argv[])
         conn_opts.onFailure = onConnectFailure;
         conn_opts.context = client;
 
+        /* https://www.eclipse.org/paho/files/mqttdoc/MQTTClient/html/struct_m_q_t_t_client___s_s_l_options.html */
         conn_opts.ssl = &sslopts;
         conn_opts.ssl->trustStore = CERT_PATH"ca.crt";
         conn_opts.ssl->keyStore = CERT_PATH"client.crt";
