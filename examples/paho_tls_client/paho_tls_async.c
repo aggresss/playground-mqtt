@@ -3,12 +3,18 @@
 #include <string.h>
 #include <unistd.h>
 #include "MQTTAsync.h"
-#define ADDRESS     "tcp://link.router7.com:1883"
+
+#include "config.h"
+
+#define CERT_PATH PROJECT_SOURCE_DIR"/material/tls/"
+
+#define ADDRESS     "ssl://link.router7.com:8883"
 #define CLIENTID    "ExampleClientSub"
-#define TOPIC       "MQTT Examples"
+#define TOPIC       "gateway/test0"
 #define PAYLOAD     "Hello World!"
 #define QOS         1
 #define TIMEOUT     10000L
+
 volatile MQTTAsync_token deliveredtoken;
 int disc_finished = 0;
 int subscribed = 0;
@@ -118,25 +124,37 @@ static void traceCallback(enum MQTTASYNC_TRACE_LEVELS level, char* message)
 int main(int argc, char* argv[])
 {
         MQTTAsync client;
+        MQTTAsync_SSLOptions sslopts = MQTTAsync_SSLOptions_initializer;
         MQTTAsync_connectOptions conn_opts = MQTTAsync_connectOptions_initializer;
         MQTTAsync_disconnectOptions disc_opts = MQTTAsync_disconnectOptions_initializer;
         MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
         MQTTAsync_token token;
         int rc;
         int ch;
-        MQTTAsync_setTraceLevel(MQTTASYNC_TRACE_MAXIMUM);
+        MQTTAsync_setTraceLevel(MQTTASYNC_TRACE_ERROR);
         MQTTAsync_setTraceCallback(traceCallback);
 
         MQTTAsync_create(&client, ADDRESS, CLIENTID, MQTTCLIENT_PERSISTENCE_NONE, NULL);
         MQTTAsync_setCallbacks(client, NULL, connlost, msgarrvd, NULL);
+
         conn_opts.keepAliveInterval = 20;
         conn_opts.cleansession = 1;
+        conn_opts.username = "admin";
+        conn_opts.password = "admin";
         conn_opts.automaticReconnect = 1;
         conn_opts.minRetryInterval = 10;
         conn_opts.maxRetryInterval = 10;
         conn_opts.onSuccess = onConnect;
         conn_opts.onFailure = onConnectFailure;
         conn_opts.context = client;
+
+        conn_opts.ssl = &sslopts;
+        conn_opts.ssl->trustStore = CERT_PATH"ca.crt";
+        conn_opts.ssl->keyStore = CERT_PATH"client.crt";
+        conn_opts.ssl->privateKey = CERT_PATH"client.key";
+        conn_opts.ssl->enableServerCertAuth = 1; /* verify server cert sign from CA */
+        conn_opts.ssl->verify = 0;  /* verify server cert CN(Conmon Name) */
+
         if ((rc = MQTTAsync_connect(client, &conn_opts)) != MQTTASYNC_SUCCESS)
         {
                 printf("Failed to start connect, return code %d\n", rc);
