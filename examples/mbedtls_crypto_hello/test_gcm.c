@@ -33,6 +33,12 @@ int main()
     /* Step 2: b64 decode */
     un_b64_len = urlsafe_b64_decode(input, intput_len, un_b64, un_b64_len);
 
+    int i;
+    for(i = 0; i< un_b64_len; i++) {
+        printf("%d ", *(unsigned char*)(un_b64 + i));
+    }
+    printf("\n");
+
     /* Step 3: Get nonce from first 12 bytes of b64 decode */
     memcpy(nonce, un_b64, NONCE_LEN);
 
@@ -43,6 +49,7 @@ int main()
     mbedtls_gcm_starts(&gcm_ctx, MBEDTLS_GCM_DECRYPT, (const unsigned char*)nonce,
             NONCE_LEN, NULL, 0);
     mbedtls_gcm_update(&gcm_ctx, (un_b64_len - NONCE_LEN), (const unsigned char*)(un_b64 + NONCE_LEN), output);
+    mbedtls_gcm_finish(&gcm_ctx, NULL, 0);
     mbedtls_gcm_free(&gcm_ctx);
 
     /* output */
