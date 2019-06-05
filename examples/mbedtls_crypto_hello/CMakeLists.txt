@@ -18,7 +18,7 @@ if(${SUBMODULE} OR BUILD_ALL)
     link_directories(${MBEDTLS_PREFIX}/lib)
   endif()
 
-  set(TEST_TARGET_1 "test_aes256")
+  set(TEST_TARGET_1 "test_gcm")
   aux_source_directory(${CMAKE_CURRENT_LIST_DIR}/b64 B64_SRC)
   add_executable(${TEST_TARGET_1} ${TEST_TARGET_1}.c ${B64_SRC})
   target_link_libraries(${TEST_TARGET_1} mbedcrypto)

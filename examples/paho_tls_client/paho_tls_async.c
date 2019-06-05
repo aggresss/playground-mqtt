@@ -8,7 +8,7 @@
 
 #define CERT_PATH PROJECT_SOURCE_DIR"/material/tls/"
 
-#define ADDRESS     "ssl://link.router7.com:8883"
+#define ADDRESS     "wss://link.router7.com:8883"
 #define CLIENTID    "ExampleClientSub"
 #define TOPIC       "gateway/test0"
 #define PAYLOAD     "Hello World!"
