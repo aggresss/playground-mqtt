@@ -27,7 +27,7 @@ int main()
     /* Step 1: Get md5sum of dsk */
     mbedtls_md5_init(&md5_ctx);
     mbedtls_md5_starts(&md5_ctx);
-    mbedtls_md5_update(&md5_ctx, dsk, strlen(dsk));
+    mbedtls_md5_update_ret(&md5_ctx, (const unsigned char*)dsk, strlen(dsk));
     mbedtls_md5_finish(&md5_ctx, dsk_md5);
 
     /* Step 2: b64 decode */
@@ -37,13 +37,12 @@ int main()
     memcpy(nonce, un_b64, NONCE_LEN);
 
     /* Step 4: AES-GCM decrypto */
-
     mbedtls_gcm_init(&gcm_ctx);
     mbedtls_gcm_setkey(&gcm_ctx, MBEDTLS_CIPHER_ID_AES, (const unsigned char*)dsk_md5,
             MD5_LEN * 8);
     mbedtls_gcm_starts(&gcm_ctx, MBEDTLS_GCM_DECRYPT, (const unsigned char*)nonce,
             NONCE_LEN, NULL, 0);
-    mbedtls_gcm_update(&gcm_ctx, un_b64_len, (const unsigned char*)un_b64, output);
+    mbedtls_gcm_update(&gcm_ctx, (un_b64_len - NONCE_LEN), (const unsigned char*)(un_b64 + NONCE_LEN), output);
     mbedtls_gcm_free(&gcm_ctx);
 
     /* output */
