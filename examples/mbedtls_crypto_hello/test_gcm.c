@@ -59,7 +59,6 @@ int main()
     mbedtls_gcm_finish(&gcm_ctx, gcm_tag, GCM_TAG_LEN);
     mbedtls_gcm_free(&gcm_ctx);
 
-    /* verify */
     if (memcmp((const unsigned char*) (un_b64 + un_b64_len - GCM_TAG_LEN),
             gcm_tag, GCM_TAG_LEN) == 0) {
         printf("Verify Success.\n");
