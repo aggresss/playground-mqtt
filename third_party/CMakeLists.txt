@@ -39,6 +39,20 @@ if(WITH_LIBEVENT)
     set(LIBEVENT_PREFIX ${PROJECT_BINARY_DIR}/third_party/libevent PARENT_SCOPE)
 endif(WITH_LIBEVENT)
 
+option(WITH_LIBUV "Build with libuv" OFF)
+if(WITH_LIBUV)
+  ExternalProject_Add(external-libuv
+    URL https://github.com/libuv/libuv/archive/v1.29.1.tar.gz
+    UPDATE_COMMAND ""
+    CMAKE_ARGS
+      -DCMAKE_INSTALL_PREFIX:PATH=${PROJECT_BINARY_DIR}/third_party/libuv
+      -DCMAKE_TOOLCHAIN_FILE:PATH=${TOOLCHAIN_FILE}
+      -DCMAKE_BUILD_TYPE:STRING=Debug
+    TEST_COMMAND ""
+    )
+    set(LIBEVENT_PREFIX ${PROJECT_BINARY_DIR}/third_party/libuv PARENT_SCOPE)
+endif(WITH_LIBUV)
+
 option(WITH_OPENSSL "Build with openssl" OFF)
 if(WITH_OPENSSL)
   ExternalProject_Add(external-openssl
