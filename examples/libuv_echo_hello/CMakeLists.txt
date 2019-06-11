@@ -20,7 +20,7 @@ if(${SUBMODULE} OR BUILD_ALL)
 
   set(TEST_TARGET_1 "test_uv")
   add_executable(${TEST_TARGET_1} ${TEST_TARGET_1}.c)
-  target_link_libraries(${TEST_TARGET_1} uv_a)
+  target_link_libraries(${TEST_TARGET_1} uv_a pthread)
 
 endif()
 
