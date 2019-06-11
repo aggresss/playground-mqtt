@@ -1,4 +1,5 @@
 /* Fork from https://github.com/nikhilm/uvbook/blob/master/code/tcp-echo-server/main.c */
+/* test methed: nc localhost 7000 */
 
 #include <stdio.h>
 #include <stdlib.h>
