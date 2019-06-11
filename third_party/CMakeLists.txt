@@ -50,7 +50,7 @@ if(WITH_LIBUV)
       -DCMAKE_BUILD_TYPE:STRING=Debug
     TEST_COMMAND ""
     )
-    set(LIBEVENT_PREFIX ${PROJECT_BINARY_DIR}/third_party/libuv PARENT_SCOPE)
+    set(LIBUV_PREFIX ${PROJECT_BINARY_DIR}/third_party/libuv PARENT_SCOPE)
 endif(WITH_LIBUV)
 
 option(WITH_OPENSSL "Build with openssl" OFF)
