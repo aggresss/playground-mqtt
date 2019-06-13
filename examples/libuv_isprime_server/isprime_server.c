@@ -1,3 +1,5 @@
+/* Fork from https://github.com/eliben/code-for-blog/blob/master/2017/async-socket-server/uv-isprime-server.c */
+
 // Primality testing server. Accepts a number and sends back "prime" or
 // "composite" after testing the number for primality (in the naive, slow way).
 //
