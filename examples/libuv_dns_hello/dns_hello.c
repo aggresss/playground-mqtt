@@ -3,6 +3,11 @@
 #include <string.h>
 #include <uv.h>
 
+typedef struct {
+    uv_write_t req;
+    uv_buf_t buf;
+} write_req_t;
+
 uv_loop_t *loop;
 
 void alloc_buffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf) {
