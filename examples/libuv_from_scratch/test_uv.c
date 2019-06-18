@@ -1,35 +1,47 @@
-/* Fork from https://github.com/nikhilm/uvbook/blob/master/code/interfaces/main.c */
-
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
 #include <uv.h>
 
-int main() {
-    char buf[512];
-    uv_interface_address_t *info;
-    int count, i;
+uv_loop_t *loop;
+uv_async_t async;
 
-    uv_interface_addresses(&info, &count);
-    i = count;
+double percentage;
 
-    printf("Number of interfaces: %d\n", count);
-    while (i--) {
-        uv_interface_address_t interface = info[i];
+void fake_download(uv_work_t *req) {
+    int size = *((int*) req->data);
+    int downloaded = 0;
+    while (downloaded < size) {
+        percentage = downloaded*100.0/size;
+        async.data = (void*) &percentage;
+        uv_async_send(&async);
 
-        printf("Name: %s\n", interface.name);
-        printf("Internal? %s\n", interface.is_internal ? "Yes" : "No");
-
-        if (interface.address.address4.sin_family == AF_INET) {
-            uv_ip4_name(&interface.address.address4, buf, sizeof(buf));
-            printf("IPv4 address: %s\n", buf);
-        }
-        else if (interface.address.address4.sin_family == AF_INET6) {
-            uv_ip6_name(&interface.address.address6, buf, sizeof(buf));
-            printf("IPv6 address: %s\n", buf);
-        }
-
-        printf("\n");
+        sleep(1);
+        downloaded += (200+random())%1000; // can only download max 1000bytes/sec,
+                                           // but at least a 200;
     }
+}
 
-    uv_free_interface_addresses(info, count);
-    return 0;
+void after(uv_work_t *req, int status) {
+    fprintf(stderr, "Download complete\n");
+    uv_close((uv_handle_t*) &async, NULL);
+}
+
+void print_progress(uv_async_t *handle) {
+    double percentage = *((double*) handle->data);
+    fprintf(stderr, "Downloaded %.2f%%\n", percentage);
+}
+
+int main() {
+    loop = uv_default_loop();
+
+    uv_work_t req;
+    int size = 10240;
+    req.data = (void*) &size;
+
+    uv_async_init(loop, &async, print_progress);
+    uv_queue_work(loop, &req, fake_download, after);
+
+    return uv_run(loop, UV_RUN_DEFAULT);
 }
