@@ -1,5 +1,5 @@
 
-char ca_crt_rsa[] = {
+char ca_crt_rsa_1[] = {
     /* http://cacerts.digitalcertvalidation.com/TrustAsiaTLSRSACA.crt */
     "-----BEGIN CERTIFICATE-----\r\n"
     "MIIErjCCA5agAwIBAgIQBYAmfwbylVM0jhwYWl7uLjANBgkqhkiG9w0BAQsFADBh\r\n"
@@ -29,4 +29,25 @@ char ca_crt_rsa[] = {
     "qnuUlWpsF1LdQNIdfbW3TSe0BhQa7ifbVIfvPWHYOu3rkg1ZeMo6XRU9B4n5VyJY\r\n"
     "RmE=\r\n"
     "-----END CERTIFICATE-----\r\n"
+};
+
+char ca_crt_rsa_2[] = {
+    /* http://cacerts.digitalcertvalidation.com/TrustAsiaTLSRSACA.crt */
+        "-----BEGIN CERTIFICATE-----\r\n"
+        "MIICljCCAX4CCQCbiHL3mQBt0TANBgkqhkiG9w0BAQsFADANMQswCQYDVQQDDAJj\r\n"
+        "YTAeFw0xOTA0MjgxMzAxMzRaFw0yOTA0MjUxMzAxMzRaMA0xCzAJBgNVBAMMAmNh\r\n"
+        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6jY55kRcq37iyMGnEFn6\r\n"
+        "NxQiLCXEx22POg+00LCJc7mzJugnd6BbbbRM2suEm+CMK6jgFYc5pkCua4KbTDkh\r\n"
+        "H0DcQ8WFOsbcjQ9z3LG7L3PinZhkmse2EyHMCXx10rpcSiXkXpWd32yxW1Q4Sxy9\r\n"
+        "EFnhTXzMJ80nRSnxr01KaBPogP+JwxBY+OVvdJCcwD835bi8HLVo+XgfhP2E09qe\r\n"
+        "4pK/7XjklcKhPyLZIIAvm8hfinKPyFaNjGSr4MMtJniI5iC+iykpht4p9LnC3Q+c\r\n"
+        "Reo0A4x1Pr+KbwvNHVdTudQm/hqTdkmRJGBQUSKkHCwyTDdTIDTp+t13gmW3RIic\r\n"
+        "gwIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQDDUgHyS3km8AHKW/cDdQhhNDBoY3RV\r\n"
+        "+ttwtr1jEPxfO6L7OqpMJwiGOos7sODUqTNKwUJSw36ZUg9xFlMuEt6XQiq+Hyip\r\n"
+        "8u5vVrDgJR/Rkeb2GDBKgUjajgSQG5FxQsKf+7HlcKVW14Nr7Ttr4LQETPiM6YG7\r\n"
+        "VpE6gMq+Bi/F4fZr7yiDVIrOOiOz1LczTGAQzPS+VKY7q7bjUIy0dsFXX6EaR6zw\r\n"
+        "G4tHKq3jsOUK9J5dT3KrS8RZEtWverRW0cWBr7ABecJtSsJ/9omqScT7/Pt65vkr\r\n"
+        "qX7y4d8eYMVvKmGbp+hi9tMw2OrepvXiyOMw2ueD+XXO+NYGfrF6YUW5\r\n"
+        "-----END CERTIFICATE-----\r\n"
+
 };
