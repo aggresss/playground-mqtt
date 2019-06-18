@@ -6,9 +6,11 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <netdb.h>
+#include <stdbool.h>
 
+#include "http_client.h"
 #include "ca_cert.h"
-#include "https.h"
+
 
 /*---------------------------------------------------------------------*/
 static int _error;
@@ -35,7 +37,7 @@ char *strtoken(char *src, char *dst, int size)
     // l-trim
     p = src;
 
-    while(TRUE)
+    while(true)
     {
         if((*p == '\n') || (*p == 0)) return NULL; /* value is not exists */
         if((*p != ' ') && (*p != '\t')) break;
@@ -43,7 +45,7 @@ char *strtoken(char *src, char *dst, int size)
     }
 
     st = p;
-    while(TRUE)
+    while(true)
     {
         ed = p;
         if(*p == ' ') {
@@ -55,7 +57,7 @@ char *strtoken(char *src, char *dst, int size)
     }
 
     // r-trim
-    while(TRUE)
+    while(true)
     {
         ed--;
         if(st == ed) break;
@@ -155,14 +157,14 @@ static int http_header(HTTP_INFO *hi, char *param)
     {
         if(strncasecmp(t2, "chunked", 7) == 0)
         {
-            hi->response.chunked = TRUE;
+            hi->response.chunked = true;
         }
     }
     else if(strncasecmp(t1, "connection:", 11) == 0)
     {
         if(strncasecmp(t2, "close", 5) == 0)
         {
-            hi->response.close = TRUE;
+            hi->response.close = true;
         }
     }
 
@@ -182,7 +184,7 @@ static int http_parse(HTTP_INFO *hi)
 
     while(1)
     {
-        if(hi->header_end == FALSE)     // header parser
+        if(hi->header_end == false)     // header parser
         {
             if((p2 = strstr(p1, "\r\n")) != NULL)
             {
@@ -198,13 +200,13 @@ static int http_parse(HTTP_INFO *hi)
                 }
                 else
                 {
-                    hi->header_end = TRUE; // reach the header-end.
+                    hi->header_end = true; // reach the header-end.
 
                     // printf("header_end .... \n");
 
                     p1 = p2 + 2;    // skip CR+LF
 
-                    if(hi->response.chunked == TRUE)
+                    if(hi->response.chunked == true)
                     {
                         len = hi->r_len - (p1 - hi->r_buf);
                         if(len > 0)
@@ -215,7 +217,7 @@ static int http_parse(HTTP_INFO *hi)
 
                                 if((hi->length = strtol(p1, NULL, 16)) == 0)
                                 {
-                                    hi->response.chunked = FALSE;
+                                    hi->response.chunked = false;
                                 }
                                 else
                                 {
@@ -269,7 +271,7 @@ static int http_parse(HTTP_INFO *hi)
         }
         else    // body parser ...
         {
-            if(hi->response.chunked == TRUE && hi->length == -1)
+            if(hi->response.chunked == true && hi->length == -1)
             {
                 len = hi->r_len - (p1 - hi->r_buf);
                 if(len > 0)
@@ -280,7 +282,7 @@ static int http_parse(HTTP_INFO *hi)
 
                         if((hi->length = strtol(p1, NULL, 16)) == 0)
                         {
-                            hi->response.chunked = FALSE;
+                            hi->response.chunked = false;
                         }
                         else
                         {
@@ -335,7 +337,7 @@ static int http_parse(HTTP_INFO *hi)
                         p1 += hi->length;
                         len -= hi->length;
 
-                        if(hi->response.chunked == TRUE && len >= 2)
+                        if(hi->response.chunked == true && len >= 2)
                         {
                             p1 += 2;    // skip CR+LF
                             hi->length = -1;
@@ -367,14 +369,14 @@ static int http_parse(HTTP_INFO *hi)
                         hi->length -= len;
                         hi->r_len = 0;
 
-                        if(hi->response.chunked == FALSE && hi->length <= 0) return 1;
+                        if(hi->response.chunked == false && hi->length <= 0) return 1;
 
                         break;
                     }
                 }
                 else
                 {
-                    if(hi->response.chunked == FALSE) return 1;
+                    if(hi->response.chunked == false) return 1;
 
                     // chunked size check ..
                     if((hi->r_len > 2) && (memcmp(p1, "\r\n", 2) == 0))
@@ -400,7 +402,7 @@ static int https_init(HTTP_INFO *hi, BOOL https, BOOL verify)
 {
     memset(hi, 0, sizeof(HTTP_INFO));
 
-    if(https == TRUE)
+    if(https == true)
     {
         mbedtls_ssl_init( &hi->tls.ssl );
         mbedtls_ssl_config_init( &hi->tls.conf );
@@ -1075,7 +1077,7 @@ int http_write_header(HTTP_INFO *hi)
                         "Referer: %s\r\n", hi->request.referrer);
     }
 
-    if(hi->request.chunked == TRUE)
+    if(hi->request.chunked == true)
     {
         len += snprintf(&request[len], H_FIELD_SIZE,
                         "Transfer-Encoding: chunked\r\n");
@@ -1086,7 +1088,7 @@ int http_write_header(HTTP_INFO *hi)
                         "Content-Length: %ld\r\n", hi->request.content_length);
     }
 
-    if(hi->request.close == TRUE)
+    if(hi->request.close == true)
     {
         len += snprintf(&request[len], H_FIELD_SIZE,
                         "Connection: close\r\n");
@@ -1129,7 +1131,7 @@ int http_write(HTTP_INFO *hi, char *data, int len)
 
     if(NULL == hi || len <= 0) return -1;
 
-    if(hi->request.chunked == TRUE)
+    if(hi->request.chunked == true)
     {
         l = snprintf(str, 10, "%x\r\n", len);
 
@@ -1150,7 +1152,7 @@ int http_write(HTTP_INFO *hi, char *data, int len)
         return -1;
     }
 
-    if(hi->request.chunked == TRUE)
+    if(hi->request.chunked == true)
     {
         if ((ret = https_write(hi, "\r\n", 2)) != 2)
         {
@@ -1172,7 +1174,7 @@ int http_write_end(HTTP_INFO *hi)
 
     if (NULL == hi) return -1;
 
-    if(hi->request.chunked == TRUE)
+    if(hi->request.chunked == true)
     {
         len = snprintf(str, 10, "0\r\n\r\n");
     }

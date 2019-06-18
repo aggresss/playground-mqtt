@@ -33,7 +33,6 @@ typedef struct
 typedef struct
 {
     bool    verify;
-
     mbedtls_net_context         ssl_fd;
     mbedtls_entropy_context     entropy;
     mbedtls_ctr_drbg_context    ctr_drbg;
