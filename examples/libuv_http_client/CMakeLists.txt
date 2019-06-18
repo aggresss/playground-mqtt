@@ -18,7 +18,7 @@ if(${SUBMODULE} OR BUILD_ALL)
     link_directories(${LIBUV_PREFIX}/lib)
   endif()
 
-  set(TEST_TARGET_1 "http_client")
+  set(TEST_TARGET_1 "http_test")
   add_executable(${TEST_TARGET_1} ${TEST_TARGET_1}.c)
   target_link_libraries(${TEST_TARGET_1} uv_a pthread)
 
