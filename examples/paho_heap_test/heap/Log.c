@@ -26,6 +26,7 @@
 #include "Log.h"
 #include "LinkedList.h"
 #include "StackTrace.h"
+#include "Messages.h"
 #include "Thread.h"
 
 #include <stdio.h>
@@ -33,6 +34,7 @@
 #include <stdarg.h>
 #include <time.h>
 #include <string.h>
+
 
 #if !defined(WIN32) && !defined(WIN64)
 #include <syslog.h>
@@ -52,6 +54,7 @@
 /**
  * _unlink mapping for linux
  */
+#include <unistd.h>
 #define _unlink unlink
 #endif
 
