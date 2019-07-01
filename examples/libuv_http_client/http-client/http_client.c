@@ -994,7 +994,6 @@ int http_open(HTTP_INFO *hi, char *url)
     int         ret, opt;
     socklen_t   slen;
 
-
     if (NULL == hi) return -1;
 
     verify = hi->tls.verify;
