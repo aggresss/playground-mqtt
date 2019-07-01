@@ -3,7 +3,7 @@
 
 static void traceCallback(enum LOG_LEVELS level, const char* message)
 {
-    printf("[ %d ]: %s\n", level, message);
+    printf("[%d]:%s", level, message);
     return;
 }
 
@@ -34,6 +34,7 @@ int main()
 
     Log(TRACE_PROTOCOL, -1, "Current heap size: %zu, max heap size: %zu.\n", hi->current_size, hi->max_size);
 
+    Log_terminate();
     Heap_terminate();
 
     return 0;
