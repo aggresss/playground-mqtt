@@ -51,7 +51,6 @@ void onConnect(void* context, MQTTAsync_successData* response)
 {
         MQTTAsync client = (MQTTAsync)context;
         MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
-        MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
         int rc;
         printf("Successful connection\n");
         printf("Subscribing to topic %s\nfor client %s using QoS%d\n\n"
@@ -101,11 +100,11 @@ void connlost(void *context, char *cause)
         conn_opts.onSuccess = onConnect;
         conn_opts.onFailure = onConnectFailure;
         conn_opts.context = client;
-//        if ((rc = MQTTAsync_connect(client, &conn_opts)) != MQTTASYNC_SUCCESS)
-//        {
-//                printf("Failed to start connect, return code %d\n", rc);
-//            finished = 1;
-//        }
+        if ((rc = MQTTAsync_connect(client, &conn_opts)) != MQTTASYNC_SUCCESS)
+        {
+                printf("Failed to start connect, return code %d\n", rc);
+            finished = 1;
+        }
 }
 
 static void traceCallback(enum MQTTASYNC_TRACE_LEVELS level, char* message)
@@ -119,8 +118,6 @@ int main(int argc, char* argv[])
 {
         MQTTAsync client;
         MQTTAsync_connectOptions conn_opts = MQTTAsync_connectOptions_initializer;
-        MQTTAsync_disconnectOptions disc_opts = MQTTAsync_disconnectOptions_initializer;
-        MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
         MQTTAsync_token token;
         int rc;
         int ch;
@@ -128,7 +125,7 @@ int main(int argc, char* argv[])
         MQTTAsync_setTraceCallback(traceCallback);
 
         MQTTAsync_create(&client, ADDRESS, CLIENTID, MQTTCLIENT_PERSISTENCE_NONE, NULL);
-        MQTTAsync_setCallbacks(client, NULL, connlost, msgarrvd, NULL);
+        MQTTAsync_setCallbacks(client, (void *)client, connlost, msgarrvd, NULL);
         conn_opts.keepAliveInterval = 20;
         conn_opts.cleansession = 1;
         conn_opts.automaticReconnect = 1;
